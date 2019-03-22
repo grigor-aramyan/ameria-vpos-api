@@ -58,3 +58,14 @@ Endpoint will return funds to buyer. This feature is active within 3 days after 
   "message", string - message accompanying the code
 }
 ```
+
+### Workflow
+
+Workflow of payment being done is fairly straightforward. Call 1st endpoint with appropriate data, get the link, redirect browser to that link, so user can enter credit card details and complete payment. Then system will redirect browser to 'backUri', provided by you in first call. It will send following data in post request, so you should catch it in your side:
+  * orderID, string - id of your payment order,
+  * respcode, string - status code of operation, '00' being successful completion,
+  * paymentid, string - id of payment, associated with current order (you generated it in first call),
+  * opaque, string - additional data
+To complete payment (transaction from user's card to your/store bank account) you should provide payment details to your user either by redirecting browser to link 'https://testpayments.ameriabank.am/forms/frm_checkprint.aspx?paymentid=${paymentid}' and bank's system will provide details for you or your should call 2nd endpoint 'get_payment_fields', provide appropriate data, get fields back and show user with your custom styling. That's all)
+
+Reverse payment feature for every payment will be active within 3 days after successful completion of above operations.
